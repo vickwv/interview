@@ -1,0 +1,36 @@
+version: '3.8'
+services:
+  redis:
+    image: redis:6-alpine
+    container_name: redis
+    restart: always
+    volumes:
+      - ./volumes/redis/data:/data
+    command: redis-server --requirepass interview100100
+    ports:
+      - "6379:6379"
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: sdlkfjal234
+      MYSQL_DATABASE: interview
+      MYSQL_USER: interview
+      MYSQL_PASSWORD: sdlkfjal234
+    volumes:
+      - ./volumes/mysql/data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  app:
+    image: interview_app:0.1
+    container_name: app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mysql
+      - redis
+    volumes:
+      - ./volumes/interview:/var/log/interview
