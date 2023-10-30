@@ -5,6 +5,7 @@ docker build . interview_app:0.1
 docker compose up -d
 
 #初始化数据库
+docker compose exec -it app bash
 python manage.py makemigrations
 python manage.py migrate
 ```
