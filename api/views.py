@@ -22,6 +22,9 @@ class UserSignUpView(AllowAnyView):
         # 创建用户账户
         email = serializer.validated_data['email']
         password = serializer.validated_data['password']
+        exist_user = User.objects.filter(email=email).first()
+        if exist_user is not None:
+            return AllowAnyView.fail(error_messages="请不要重复注册")
         try:
             user = User.objects.create_user(email=email, password=password)
 
@@ -29,9 +32,9 @@ class UserSignUpView(AllowAnyView):
             refresh_token = JWTAuthentication.create_jwt(user, "access", 24 * 31)
 
             return AllowAnyView.success(data={'access_token': access_token,
-                                          'refresh_token': refresh_token,
-                                          'id': user.id,
-                                          'email': user.email
+                                              'refresh_token': refresh_token,
+                                              'id': user.id,
+                                              'email': user.email
                                               })
         except Exception as e:
             log.error("注册失败", extra=e.__dict__)
@@ -58,7 +61,7 @@ class UserSignInView(AllowAnyView):
         refresh_token = JWTAuthentication.create_jwt(user, "access", settings.JWT_CONFIG['JWT_REF_EXP'])
 
         return AllowAnyView.success(data={'access_token': access_token,
-                                      'refresh_token': refresh_token})
+                                          'refresh_token': refresh_token})
 
 
 class UserInfoView(NeedLoginView):
