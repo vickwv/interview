@@ -19,7 +19,7 @@ from django.urls import path, include
 import api.views
 
 urlpatterns = [
-    path('signin', api.views.UserSignInView.as_view()),
-    path('signup', api.views.UserSignUpView.as_view()),
-    path('me', api.views.UserInfoView.as_view()),
+    path('signin/', api.views.UserSignInView.as_view()),
+    path('signup/', api.views.UserSignUpView.as_view()),
+    path('me/', api.views.UserInfoView.as_view()),
 ]
